@@ -128,4 +128,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Python environment and VS Code files
 dl-lab/
+.vscode/
+
+# C object files and other stuff
+*.o
+*.x
