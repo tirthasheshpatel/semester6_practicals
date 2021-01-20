@@ -130,6 +130,7 @@ dmypy.json
 
 # Python environment and VS Code files
 dl-lab/
+nlp-lab/
 .vscode/
 
 # C object files and other stuff
