@@ -1,18 +1,21 @@
-.PHONY: all build clean info
+.PHONY: all build clean info help
 
 CXX        := -c++
-CXXFLAGS   := -pedantic-errors -Wall -Wextra -Werror -O3
-LDFLAGS    := -L/usr/lib -lstdc++ -lm
 INCLUDE    := -Iinclude/
+INC        := $(INCLUDE)
+CXXFLAGS   := -pedantic-errors -Wall -Wextra -Werror -O3 $(INC)
+LDFLAGS    := -L/usr/lib -lstdc++ -lm
 SRC        := $(wildcard *.cc)
 
 OBJECTS    := $(SRC:%.cc=%.o)
 TARGETS    := $(SRC:%.cc=%.x)
 
 OBJ_DIR    := ./build
-BUILD_DIR  := $(OBJ_DIR)
+BUILD_DIR  := $(OBJ_DIR)/bin
 
 all: build $(TARGETS)
+
+help: info
 
 info:
 	@echo "[*] Object dir:      $(OBJ_DIR)     "
@@ -27,13 +30,16 @@ build:
 
 %.x: %.o
 	@echo "Compiling $@."
-	@$(CXX) $^ $(CXXFLAGS) $(INCLUDE) -o $@
+	@$(CXX) $^ $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
 	@mv $^ $(OBJ_DIR)/$^
 	@mv $@ $(BUILD_DIR)/$@
 
 %: %.x
 	@echo "Executing $@."
+	@echo ""
+	@echo "======================== stdout =========================="
 	@./$(BUILD_DIR)/$@.x
+	@echo "=========================================================="
 
 clean:
 	@rm -f *.o *.x
