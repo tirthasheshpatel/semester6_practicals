@@ -18,12 +18,15 @@ int main()
     std::cout << G1 << std::endl;
     std::cout << "G2:\n";
     std::cout << G2 << std::endl;
+
     std::cout << "\nUnion of the G1 and G2 is : " << std::endl;
     std::cout << "G3:\n";
     std::cout << G3 << std::endl;
+
     std::cout << "\nIntersection of the G1 and G2 is : " << std::endl;
     std::cout << "G4:\n";
     std::cout << G4 << std::endl;
+
     std::cout << "\nRing Sum of the G1 and G2 is : " << std::endl;
     std::cout << "G5:\n";
     std::cout << G5 << std::endl;
