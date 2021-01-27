@@ -13,6 +13,12 @@ TARGETS    := $(SRC:%.cc=%.x)
 OBJ_DIR    := ./build
 BUILD_DIR  := $(OBJ_DIR)/bin
 
+COLS       := `tput cols`
+TWO        := 2
+FOUR       := 4
+CHARS_TMP  := $(shell expr $(COLS)/$(TWO))
+CHARS      := $(shell expr $(CHARS_TMP)-$(FOUR))
+
 all: build $(TARGETS)
 
 help: info
@@ -28,18 +34,30 @@ build:
 	@mkdir -p $(OBJ_DIR)
 	@mkdir -p $(BUILD_DIR)
 
-%.x: %.o
+$(BUILD_DIR)/%.x: %.o
 	@echo "Compiling $@."
 	@$(CXX) $^ $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
-	@mv $^ $(OBJ_DIR)/$^
-	@mv $@ $(BUILD_DIR)/$@
 
-%: %.x
+%.x: $(BUILD_DIR)/%.x
+
+%: $(BUILD_DIR)/%.x
+	@SHELL=/bin/bash
 	@echo "Executing $@."
 	@echo ""
-	@echo "======================== stdout =========================="
+	@for i in seq 1, $(CHARS) ; do \
+		echo -n "=" ; \
+	done
+	@echo -n " stdout "
+	@for i in seq 1, $(CHARS) ; do \
+		echo -n "=" ; \
+	done
+	@echo "\n"
 	@./$(BUILD_DIR)/$@.x
-	@echo "=========================================================="
+	@echo "\n"
+	@for i in seq 1, $(COLS) ; do \
+		echo -n "=" ; \
+	done
+	@echo ""
 
 clean:
 	@rm -f *.o *.x
