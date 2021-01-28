@@ -6,18 +6,13 @@ INC        := $(INCLUDE)
 CXXFLAGS   := -pedantic-errors -Wall -Wextra -Werror -O3 $(INC)
 LDFLAGS    := -L/usr/lib -lstdc++ -lm
 SRC        := $(wildcard *.cc)
-
-OBJECTS    := $(SRC:%.cc=%.o)
-TARGETS    := $(SRC:%.cc=%.x)
-
 OBJ_DIR    := ./build
 BUILD_DIR  := $(OBJ_DIR)/bin
 
-COLS       := `tput cols`
-TWO        := 2
-FOUR       := 4
-CHARS_TMP  := $(shell expr $(COLS)/$(TWO))
-CHARS      := $(shell expr $(CHARS_TMP)-$(FOUR))
+OBJECTS    := $(SRC:%.cc=%.o)
+TARGETS    := $(SRC:%.cc=$(BUILD_DIR)/%.x)
+
+SHELL      := /bin/bash
 
 all: build $(TARGETS)
 
@@ -37,27 +32,15 @@ build:
 $(BUILD_DIR)/%.x: %.o
 	@echo "Compiling $@."
 	@$(CXX) $^ $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
+	@mv $^ $(OBJ_DIR)/$^
+
+%: build $(BUILD_DIR)/%.x
+	@echo "Executing $@."
+	@python helper.py 0
+	@./$(BUILD_DIR)/$@.x
+	@python helper.py 1
 
 %.x: $(BUILD_DIR)/%.x
-
-%: $(BUILD_DIR)/%.x
-	@SHELL=/bin/bash
-	@echo "Executing $@."
-	@echo ""
-	@for i in seq 1, $(CHARS) ; do \
-		echo -n "=" ; \
-	done
-	@echo -n " stdout "
-	@for i in seq 1, $(CHARS) ; do \
-		echo -n "=" ; \
-	done
-	@echo "\n"
-	@./$(BUILD_DIR)/$@.x
-	@echo "\n"
-	@for i in seq 1, $(COLS) ; do \
-		echo -n "=" ; \
-	done
-	@echo ""
 
 clean:
 	@rm -f *.o *.x
