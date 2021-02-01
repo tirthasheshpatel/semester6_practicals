@@ -1,18 +1,20 @@
 .PHONY: all build clean info help
 
 CXX        := -c++
+PYTHON     := python
+SHELL      := /bin/bash
+
 INCLUDE    := -Iinclude/
 INC        := $(INCLUDE)
 CXXFLAGS   := -pedantic-errors -Wall -Wextra -Werror -O3 $(INC)
 LDFLAGS    := -L/usr/lib -lstdc++ -lm
+
 SRC        := $(wildcard *.cc)
 OBJ_DIR    := ./build
 BUILD_DIR  := $(OBJ_DIR)/bin
 
 OBJECTS    := $(SRC:%.cc=%.o)
 TARGETS    := $(SRC:%.cc=$(BUILD_DIR)/%.x)
-
-SHELL      := /bin/bash
 
 all: build $(TARGETS)
 
@@ -36,11 +38,11 @@ $(BUILD_DIR)/%.x: %.o
 
 %: build $(BUILD_DIR)/%.x
 	@echo "Executing $@."
-	@python helper.py 0
+	@$(PYTHON) helper.py 0
 	@./$(BUILD_DIR)/$@.x
-	@python helper.py 1
+	@$(PYTHON) helper.py 1
 
 %.x: $(BUILD_DIR)/%.x
 
 clean:
-	@rm -f *.o *.x
+	@rm -rf build/*.o build/bin/*.x __pycache__/
