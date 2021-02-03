@@ -12,10 +12,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from beautify import bcolors
 
-dataset = pd.read_csv('data/Restaurant_Reviews.tsv', delimiter = '\t', quoting = 3)
+dataset = pd.read_csv("data/Restaurant_Reviews.tsv", delimiter="\t", quoting=3)
 
 # most frequently used words in a language
-nltk.download('stopwords')
+nltk.download("stopwords")
 # download pos tagging model
 nltk.download("averaged_perceptron_tagger")
 
@@ -23,8 +23,8 @@ corpus = []
 original_reviews = []
 
 for i in range(0, 1000):
-    original_reviews.append(dataset['Review'][i])
-    review = re.sub('[^a-zA-Z]', ' ', dataset['Review'][i])
+    original_reviews.append(dataset["Review"][i])
+    review = re.sub("[^a-zA-Z]", " ", dataset["Review"][i])
     review = review.lower()
     review = review.split()
 
@@ -47,8 +47,10 @@ for i in range(0, 1000):
     # ===========================================================
 
     ps = PorterStemmer()
-    review = [ps.stem(word) for word in review if not word in set(stopwords.words('english'))]
-    review = ' '.join(review)
+    review = [
+        ps.stem(word) for word in review if not word in set(stopwords.words("english"))
+    ]
+    review = " ".join(review)
     corpus.append(review)
 
 print(f"\n" f"{bcolors.GREEN}" "Some Unprocessed Reviews" f"{bcolors.ENDC}" "\n")
@@ -62,21 +64,27 @@ for i in range(0, 10):
     print(corpus[i])
 
 # Creating the Bag of Words model
-cv = CountVectorizer(max_features = 1500)
+cv = CountVectorizer(max_features=1500)
 X = cv.fit_transform(corpus).toarray()
 y = dataset.iloc[:, 1].values
 
 # =================== TF-IDF Coding ========================
 
 # TF-IDF Coding! (using first 10 reviews)
-print("\n" f"{bcolors.GREEN}" "TF-IDF Coding (using first 10 reviews)" f"{bcolors.ENDC}" "\n")
+print(
+    "\n"
+    f"{bcolors.GREEN}"
+    "TF-IDF Coding (using first 10 reviews)"
+    f"{bcolors.ENDC}"
+    "\n"
+)
 vectorizer = TfidfVectorizer(stop_words="english")
 tf_idf = vectorizer.fit_transform(corpus[:10])
 print(f"{bcolors.CYAN}" "Token's used as Features\n" f"{bcolors.ENDC}")
 pprint(vectorizer.get_feature_names())
 print("\n")
 print(f"{bcolors.CYAN}" "Size of the array\n" f"{bcolors.ENDC}")
-print(tf_idf.shape,"\n")
+print(tf_idf.shape, "\n")
 print("\n")
 print(f"{bcolors.CYAN}" "TF-IDF Matrix\n" f"{bcolors.ENDC}")
 print(tf_idf.toarray())
