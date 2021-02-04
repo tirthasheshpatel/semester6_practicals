@@ -48,7 +48,7 @@ print(
 )
 
 cv = CountVectorizer(
-    input=cat_in_the_hat_docs, stop_words=["all", "in", "the", "is", "and"]
+    input=cat_in_the_hat_docs, stop_words=["all", "in", "the", "is", "and"] # "english"
 )
 count_vector = cv.fit_transform(cat_in_the_hat_docs)
 
