@@ -1,8 +1,8 @@
-# Practical 1
+# Practical 2
 
 ## 18BCE243
 
-## Code of Practical 1
+## Code of Practical 2
 
 ```c++
 #include <set>
