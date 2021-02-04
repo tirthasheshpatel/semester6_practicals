@@ -8,4 +8,4 @@ all: $(TARGETS)
 
 %:
 	@echo "Creating '$@.pdf'"
-	@pandoc $@.md --pdf-engine=xelatex -o 18BCE244_$@.pdf
+	@pandoc $@.md --pdf-engine=xelatex -o 18BCE243_$@.pdf
