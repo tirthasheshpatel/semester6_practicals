@@ -16,16 +16,22 @@ BUILD_DIR  := $(OBJ_DIR)/bin
 OBJECTS    := $(SRC:%.cc=%.o)
 TARGETS    := $(SRC:%.cc=$(BUILD_DIR)/%.x)
 
-all: build $(TARGETS)
+SUBMIT_DIR := ./submission_files
+SUBMIT_SRC := $(wildcard $(SUBMIT_DIR)/*.md)
+SUBMIT     := $(SUBMIT_SRC:$(SUBMIT_DIR)/%.md=%.pdf)
+
+all: build $(TARGETS) $(SUBMIT)
 
 help: info
 
 info:
 	@echo "[*] Object dir:      $(OBJ_DIR)     "
 	@echo "[*] Build dir:       $(BUILD_DIR)   "
-	@echo "[*] Sources:         ${SRC}         "
-	@echo "[*] Objects:         ${OBJECTS}     "
+	@echo "[*] Submission dir:  $(SUBMIT_DIR)  "
+	@echo "[*] Sources:         $(SRC)         "
+	@echo "[*] Objects:         $(OBJECTS)     "
 	@echo "[*] Targets:         $(TARGETS)     "
+	@echo "[*] Submissions:     $(SUBMIT)      "
 
 build:
 	@mkdir -p $(OBJ_DIR)
@@ -36,13 +42,16 @@ $(BUILD_DIR)/%.x: %.o
 	@$(CXX) $^ $(CXXFLAGS) $(INCLUDE) $(LDFLAGS) -o $@
 	@mv $^ $(OBJ_DIR)/$^
 
+%.x: $(BUILD_DIR)/%.x
+
+%.pdf:
+	@cd $(SUBMIT_DIR) ; $(MAKE) `echo $@ | grep -o '^[^\.]*'` --no-print-directory
+
 %: build $(BUILD_DIR)/%.x
 	@echo "Executing $@."
 	@$(PYTHON) helper.py 0
 	@./$(BUILD_DIR)/$@.x
 	@$(PYTHON) helper.py 1
-
-%.x: $(BUILD_DIR)/%.x
 
 clean:
 	@rm -rf build/*.o build/bin/*.x __pycache__/
