@@ -1,7 +1,6 @@
 .PHONY: all build clean info help
 
 CXX        := -c++
-PYTHON     := python
 SHELL      := /bin/bash
 
 INCLUDE    := -Iinclude/
@@ -49,9 +48,9 @@ $(BUILD_DIR)/%.x: %.o
 
 %: build $(BUILD_DIR)/%.x
 	@echo "Executing $@."
-	@$(PYTHON) helper.py 0
+	@./helper.py 0
 	@./$(BUILD_DIR)/$@.x
-	@$(PYTHON) helper.py 1
+	@./helper.py 1
 
 clean:
 	@rm -rf build/*.o build/bin/*.x __pycache__/
