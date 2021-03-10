@@ -19,7 +19,7 @@ typedef struct _vertex_t
 vertex_t * djikstra(map<int, vector<pair<int, int> > > adj_list, int init, int goal)
 {
     priority_queue<pair<int, int> > frontier;   // currently exploring
-    set<int> explored;              // explored
+    set<int> explored;                          // explored
     vertex_t *prev = NULL;
 
     // start with exploring the initial node
