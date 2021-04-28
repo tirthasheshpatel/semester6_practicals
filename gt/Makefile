@@ -5,7 +5,7 @@ SHELL      := /bin/bash
 
 INCLUDE    := -Iinclude/
 INC        := $(INCLUDE)
-CXXFLAGS   := -pedantic-errors -Wall -Wextra -Werror -O3 $(INC)
+CXXFLAGS   := -O3 $(INC)
 LDFLAGS    := -L/usr/lib -lstdc++ -lm
 
 SRC        := $(wildcard *.cc)
@@ -48,9 +48,9 @@ $(BUILD_DIR)/%.x: %.o
 
 %: build $(BUILD_DIR)/%.x
 	@echo "Executing $@."
-	@./helper.py 0
+	@python3.9 helper.py 0
 	@./$(BUILD_DIR)/$@.x
-	@./helper.py 1
+	@python3.9 helper.py 1
 
 clean:
 	@rm -rf build/*.o build/bin/*.x __pycache__/
